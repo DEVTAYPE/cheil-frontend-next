@@ -13,7 +13,6 @@ export interface Producto {
   precio: number
   stock: number
   imagenUrl: string | null
-  categoriaId: number
   categoria: { id: number; nombre: string }
   createdAt: string
   updatedAt: string

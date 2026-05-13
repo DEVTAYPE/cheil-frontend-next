@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import type { Categoria } from '@/lib/types'
 import { productoSchema, type ProductoInput } from '@/lib/schemas'
 import { Button } from '@/components/ui/Button'
@@ -23,6 +23,7 @@ export function ProductoForm({
 }: ProductoFormProps) {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ProductoInput>({
@@ -58,14 +59,21 @@ export function ProductoForm({
           {...register('stock', { valueAsNumber: true })}
         />
       </div>
-      <Select
-        label="Categoría"
-        placeholder="Selecciona una categoría"
-        error={errors.categoriaId?.message}
-        options={categorias.map((c) => ({ value: c.id, label: c.nombre }))}
-        {...register('categoriaId', {
-          setValueAs: (v: string) => (v === '' ? 0 : Number(v)),
-        })}
+      <Controller
+        control={control}
+        name="categoriaId"
+        render={({ field }) => (
+          <Select
+            label="Categoría"
+            placeholder="Selecciona una categoría"
+            error={errors.categoriaId?.message}
+            options={categorias.map((c) => ({ value: String(c.id), label: c.nombre }))}
+            value={field.value ? String(field.value) : ''}
+            onChange={(e) => field.onChange(e.target.value === '' ? 0 : Number(e.target.value))}
+            onBlur={field.onBlur}
+            name={field.name}
+          />
+        )}
       />
       <div className="flex justify-end pt-2">
         <Button type="submit" loading={isSubmitting}>

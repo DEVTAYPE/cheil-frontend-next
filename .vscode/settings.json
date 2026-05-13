@@ -1,3 +1,3 @@
 {
-  "conventionalCommits.scopes": ["categories", "products"]
+  "conventionalCommits.scopes": ["categories", "products", "auth"]
 }
