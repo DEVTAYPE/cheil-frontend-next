@@ -15,8 +15,8 @@ export default function EditarProductoPage() {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const { data: producto, isLoading } = useProducto(id)
-  const { data: categorias = [] } = useCategorias()
+  const { data: producto, isLoading: isLoadingProducto } = useProducto(id)
+  const { data: categorias = [], isLoading: isLoadingCategorias } = useCategorias()
   const updateMutation = useUpdateProducto()
   const uploadMutation = useUploadImagen()
 
@@ -39,7 +39,7 @@ export default function EditarProductoPage() {
     }
   }
 
-  if (isLoading) {
+  if (isLoadingProducto || isLoadingCategorias) {
     return (
       <div className="flex justify-center py-12">
         <span className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />

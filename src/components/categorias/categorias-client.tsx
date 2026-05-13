@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/Button'
 import { useCategoriasPage } from './hooks/use-categorias-page'
@@ -28,6 +29,11 @@ export function CategoriasClient() {
     handleDelete,
   } = useCategoriasPage()
 
+  const categoryName = useMemo(
+    () => categorias.find((c) => c.id === confirmDeleteId)?.nombre ?? '',
+    [categorias, confirmDeleteId],
+  )
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -54,7 +60,7 @@ export function CategoriasClient() {
 
       <ConfirmDeleteModal
         open={confirmDeleteId !== null}
-        categoryName={categorias.find((c) => c.id === confirmDeleteId)?.nombre ?? ''}
+        categoryName={categoryName}
         isDeleting={isDeleting}
         onConfirm={() => confirmDeleteId !== null && handleDelete(confirmDeleteId)}
         onCancel={cancelDelete}
