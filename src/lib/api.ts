@@ -1,22 +1,18 @@
-import { getToken, removeToken } from './auth'
 import type { Categoria, ListProductosParams, PaginatedResult, Producto } from './types'
 
-const BASE = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`
+const BASE = '/api/proxy'
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const token = getToken()
-
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
       ...(!(init?.body instanceof FormData) && { 'Content-Type': 'application/json' }),
-      ...(token && { Authorization: `Bearer ${token}` }),
       ...init?.headers,
     },
   })
 
   if (res.status === 401) {
-    removeToken()
+    await fetch('/api/auth/logout', { method: 'POST' })
     if (typeof window !== 'undefined') window.location.replace('/login')
     throw new Error('Sesión expirada')
   }
