@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useTransition, useState } from 'react'
 import { toast } from 'sonner'
 import { useCategorias } from '@/hooks/useCategorias'
 import { useDeleteProducto, useProductos } from '@/hooks/useProductos'
@@ -7,21 +7,23 @@ import type { ListProductosParams } from '@/lib/types'
 export function useProductosPage() {
   const [params, setParams] = useState<ListProductosParams>({ page: 1, limit: 10 })
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
+  const [isNavigating, startNavigation] = useTransition()
 
   const { data, isLoading, isError, error } = useProductos(params)
   const { data: categorias = [] } = useCategorias()
   const deleteMutation = useDeleteProducto()
 
   const applyFilter = (f: ListProductosParams) =>
-    setParams((p) => ({ ...p, ...f, page: 1 }))
+    startNavigation(() => setParams((p) => ({ ...p, ...f, page: 1 })))
 
-  const clearFilter = () => setParams({ page: 1, limit: 10 })
+  const clearFilter = () =>
+    startNavigation(() => setParams({ page: 1, limit: 10 }))
 
   const goToPrevPage = () =>
-    setParams((p) => ({ ...p, page: (p.page ?? 1) - 1 }))
+    startNavigation(() => setParams((p) => ({ ...p, page: (p.page ?? 1) - 1 })))
 
   const goToNextPage = () =>
-    setParams((p) => ({ ...p, page: (p.page ?? 1) + 1 }))
+    startNavigation(() => setParams((p) => ({ ...p, page: (p.page ?? 1) + 1 })))
 
   const requestDelete = (id: number) => setConfirmDeleteId(id)
   const cancelDelete = () => setConfirmDeleteId(null)
@@ -41,6 +43,7 @@ export function useProductosPage() {
     isLoading,
     isError,
     error,
+    isNavigating,
     categorias,
     confirmDeleteId,
     isDeleting: deleteMutation.isPending,

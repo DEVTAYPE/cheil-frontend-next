@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createProducto,
   deleteProducto,
@@ -13,6 +13,7 @@ export function useProductos(params: ListProductosParams = {}) {
   return useQuery({
     queryKey: ['productos', params],
     queryFn: () => getProductos(params),
+    placeholderData: keepPreviousData,
   })
 }
 

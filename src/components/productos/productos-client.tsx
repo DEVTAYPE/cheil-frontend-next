@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useMemo } from 'react'
 import { Button } from '@/components/ui/Button'
 import { useProductosPage } from './hooks/use-productos-page'
 import { FiltrosProductos } from './organisms/filtros-productos'
@@ -37,6 +38,7 @@ export function ProductosClient() {
     isLoading,
     isError,
     error,
+    isNavigating,
     categorias,
     confirmDeleteId,
     isDeleting,
@@ -48,6 +50,11 @@ export function ProductosClient() {
     cancelDelete,
     handleDelete,
   } = useProductosPage()
+
+  const productName = useMemo(
+    () => data?.items.find((p) => p.id === confirmDeleteId)?.nombre ?? '',
+    [data?.items, confirmDeleteId],
+  )
 
   return (
     <div className="space-y-6">
@@ -81,20 +88,22 @@ export function ProductosClient() {
       )}
 
       {data && (
-        <ProductosTable
-          items={data.items}
-          page={data.page}
-          lastPage={data.lastPage}
-          total={data.total}
-          onRequestDelete={requestDelete}
-          onPrevPage={goToPrevPage}
-          onNextPage={goToNextPage}
-        />
+        <div className={isNavigating ? 'pointer-events-none opacity-60 transition-opacity' : ''}>
+          <ProductosTable
+            items={data.items}
+            page={data.page}
+            lastPage={data.lastPage}
+            total={data.total}
+            onRequestDelete={requestDelete}
+            onPrevPage={goToPrevPage}
+            onNextPage={goToNextPage}
+          />
+        </div>
       )}
 
       <ConfirmDeleteModal
         open={confirmDeleteId !== null}
-        productName={data?.items.find((p) => p.id === confirmDeleteId)?.nombre ?? ''}
+        productName={productName}
         isDeleting={isDeleting}
         onConfirm={() => confirmDeleteId !== null && handleDelete(confirmDeleteId)}
         onCancel={cancelDelete}
