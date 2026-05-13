@@ -1,0 +1,62 @@
+import type { Categoria } from '@/lib/types'
+import { EmptyRow } from '../molecules/empty-row'
+import { CategoriaRow } from './categoria-row'
+
+const TABLE_HEADERS = ['#', 'Nombre', 'Descripción', 'Acciones']
+
+interface CategoriaTableProps {
+  categorias: Categoria[]
+  confirmDeleteId: number | null
+  isDeleting: boolean
+  onEdit: (cat: Categoria) => void
+  onRequestDelete: (id: number) => void
+  onConfirmDelete: (id: number) => void
+  onCancelDelete: () => void
+}
+
+export function CategoriaTable({
+  categorias,
+  confirmDeleteId,
+  isDeleting,
+  onEdit,
+  onRequestDelete,
+  onConfirmDelete,
+  onCancelDelete,
+}: CategoriaTableProps) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            {TABLE_HEADERS.map((h) => (
+              <th
+                key={h}
+                className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500"
+              >
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-100">
+          {categorias.length === 0 ? (
+            <EmptyRow colSpan={TABLE_HEADERS.length} />
+          ) : (
+            categorias.map((cat) => (
+              <CategoriaRow
+                key={cat.id}
+                categoria={cat}
+                isConfirmingDelete={confirmDeleteId === cat.id}
+                isDeleting={isDeleting}
+                onEdit={() => onEdit(cat)}
+                onRequestDelete={() => onRequestDelete(cat.id)}
+                onConfirmDelete={() => onConfirmDelete(cat.id)}
+                onCancelDelete={onCancelDelete}
+              />
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  )
+}
