@@ -7,7 +7,7 @@ import { useCategorias } from '@/hooks/useCategorias'
 import { useProducto, useUpdateProducto, useUploadImagen } from '@/hooks/useProductos'
 import type { ProductoInput } from '@/lib/schemas'
 import { Button } from '@/components/ui/Button'
-import { ProductoForm } from '@/components/productos/ProductoForm'
+import { ProductoForm } from '@/components/productos/organisms/producto-form'
 
 export default function EditarProductoPage() {
   const { id: idParam } = useParams()

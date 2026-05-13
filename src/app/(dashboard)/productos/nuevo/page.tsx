@@ -6,7 +6,7 @@ import { useCategorias } from '@/hooks/useCategorias'
 import { useCreateProducto } from '@/hooks/useProductos'
 import type { ProductoInput } from '@/lib/schemas'
 import { Button } from '@/components/ui/Button'
-import { ProductoForm } from '@/components/productos/ProductoForm'
+import { ProductoForm } from '@/components/productos/organisms/producto-form'
 
 export default function NuevoProductoPage() {
   const router = useRouter()
