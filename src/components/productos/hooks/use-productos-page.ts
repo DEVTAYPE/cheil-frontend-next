@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { useCategorias } from '@/hooks/useCategorias'
 import { useDeleteProducto, useProductos } from '@/hooks/useProductos'
 import type { ListProductosParams } from '@/lib/types'
@@ -29,8 +30,9 @@ export function useProductosPage() {
     try {
       await deleteMutation.mutateAsync(id)
       cancelDelete()
-    } catch {
-      // error shown via deleteMutation.isError
+      toast.success('Producto eliminado correctamente')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al eliminar el producto')
     }
   }
 

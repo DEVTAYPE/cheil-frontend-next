@@ -6,6 +6,7 @@ import { useCategoriasPage } from './hooks/use-categorias-page'
 import { Spinner } from './atoms/spinner'
 import { PlusIcon } from './atoms/plus-icon'
 import { ErrorBanner } from './molecules/error-banner'
+import { ConfirmDeleteModal } from './molecules/confirm-delete-modal'
 import { CategoriaTable } from './organisms/categoria-table'
 import { CategoriaForm } from './organisms/categoria-form'
 
@@ -46,14 +47,18 @@ export function CategoriasClient() {
       {!isLoading && (
         <CategoriaTable
           categorias={categorias}
-          confirmDeleteId={confirmDeleteId}
-          isDeleting={isDeleting}
           onEdit={openEdit}
           onRequestDelete={requestDelete}
-          onConfirmDelete={handleDelete}
-          onCancelDelete={cancelDelete}
         />
       )}
+
+      <ConfirmDeleteModal
+        open={confirmDeleteId !== null}
+        categoryName={categorias.find((c) => c.id === confirmDeleteId)?.nombre ?? ''}
+        isDeleting={isDeleting}
+        onConfirm={() => confirmDeleteId !== null && handleDelete(confirmDeleteId)}
+        onCancel={cancelDelete}
+      />
 
       <Modal
         open={modal !== null}

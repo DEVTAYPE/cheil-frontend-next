@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import {
   useCategorias,
   useCreateCategoria,
@@ -48,8 +49,9 @@ export function useCategoriasPage() {
     try {
       await deleteMutation.mutateAsync(id)
       cancelDelete()
-    } catch {
-      // error handled by mutation state
+      toast.success('Categoría eliminada correctamente')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Error al eliminar la categoría')
     }
   }
 

@@ -9,11 +9,7 @@ interface ProductosTableProps {
   page: number
   lastPage: number
   total: number
-  confirmDeleteId: number | null
-  isDeleting: boolean
   onRequestDelete: (id: number) => void
-  onConfirmDelete: (id: number) => void
-  onCancelDelete: () => void
   onPrevPage: () => void
   onNextPage: () => void
 }
@@ -23,11 +19,7 @@ export function ProductosTable({
   page,
   lastPage,
   total,
-  confirmDeleteId,
-  isDeleting,
   onRequestDelete,
-  onConfirmDelete,
-  onCancelDelete,
   onPrevPage,
   onNextPage,
 }: ProductosTableProps) {
@@ -58,11 +50,7 @@ export function ProductosTable({
               <ProductoRow
                 key={producto.id}
                 producto={producto}
-                isConfirmingDelete={confirmDeleteId === producto.id}
-                isDeleting={isDeleting}
                 onRequestDelete={() => onRequestDelete(producto.id)}
-                onConfirmDelete={() => onConfirmDelete(producto.id)}
-                onCancelDelete={onCancelDelete}
               />
             ))
           )}

@@ -21,6 +21,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error('Sesión expirada')
   }
 
+  if (res.status === 204 || res.headers.get('content-length') === '0') {
+    return undefined as T
+  }
+
   const json = await res.json()
   if (!json.success) throw new Error(json.message ?? 'Error en la solicitud')
   return json.data as T

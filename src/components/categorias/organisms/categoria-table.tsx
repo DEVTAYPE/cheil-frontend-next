@@ -6,23 +6,11 @@ const TABLE_HEADERS = ['#', 'Nombre', 'Descripción', 'Acciones']
 
 interface CategoriaTableProps {
   categorias: Categoria[]
-  confirmDeleteId: number | null
-  isDeleting: boolean
   onEdit: (cat: Categoria) => void
   onRequestDelete: (id: number) => void
-  onConfirmDelete: (id: number) => void
-  onCancelDelete: () => void
 }
 
-export function CategoriaTable({
-  categorias,
-  confirmDeleteId,
-  isDeleting,
-  onEdit,
-  onRequestDelete,
-  onConfirmDelete,
-  onCancelDelete,
-}: CategoriaTableProps) {
+export function CategoriaTable({ categorias, onEdit, onRequestDelete }: CategoriaTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       <table className="min-w-full divide-y divide-gray-200">
@@ -46,12 +34,8 @@ export function CategoriaTable({
               <CategoriaRow
                 key={cat.id}
                 categoria={cat}
-                isConfirmingDelete={confirmDeleteId === cat.id}
-                isDeleting={isDeleting}
                 onEdit={() => onEdit(cat)}
                 onRequestDelete={() => onRequestDelete(cat.id)}
-                onConfirmDelete={() => onConfirmDelete(cat.id)}
-                onCancelDelete={onCancelDelete}
               />
             ))
           )}

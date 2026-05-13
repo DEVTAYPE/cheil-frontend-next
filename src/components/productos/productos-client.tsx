@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { useProductosPage } from './hooks/use-productos-page'
 import { FiltrosProductos } from './organisms/filtros-productos'
 import { ProductosTable } from './organisms/productos-table'
+import { ConfirmDeleteModal } from './molecules/confirm-delete-modal'
 
 function Spinner() {
   return (
@@ -85,15 +86,19 @@ export function ProductosClient() {
           page={data.page}
           lastPage={data.lastPage}
           total={data.total}
-          confirmDeleteId={confirmDeleteId}
-          isDeleting={isDeleting}
           onRequestDelete={requestDelete}
-          onConfirmDelete={handleDelete}
-          onCancelDelete={cancelDelete}
           onPrevPage={goToPrevPage}
           onNextPage={goToNextPage}
         />
       )}
+
+      <ConfirmDeleteModal
+        open={confirmDeleteId !== null}
+        productName={data?.items.find((p) => p.id === confirmDeleteId)?.nombre ?? ''}
+        isDeleting={isDeleting}
+        onConfirm={() => confirmDeleteId !== null && handleDelete(confirmDeleteId)}
+        onCancel={cancelDelete}
+      />
     </div>
   )
 }

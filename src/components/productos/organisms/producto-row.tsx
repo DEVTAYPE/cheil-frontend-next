@@ -11,21 +11,10 @@ const formatPrice = (price: number) =>
 
 interface ProductoRowProps {
   producto: Producto
-  isConfirmingDelete: boolean
-  isDeleting: boolean
   onRequestDelete: () => void
-  onConfirmDelete: () => void
-  onCancelDelete: () => void
 }
 
-export function ProductoRow({
-  producto,
-  isConfirmingDelete,
-  isDeleting,
-  onRequestDelete,
-  onConfirmDelete,
-  onCancelDelete,
-}: ProductoRowProps) {
+export function ProductoRow({ producto, onRequestDelete }: ProductoRowProps) {
   return (
     <tr className="transition-colors hover:bg-gray-50">
       <td className="px-4 py-3 text-sm text-gray-500">{producto.id}</td>
@@ -51,13 +40,7 @@ export function ProductoRow({
               Editar
             </Button>
           </Link>
-          <DeleteActions
-            isConfirming={isConfirmingDelete}
-            isDeleting={isDeleting}
-            onRequest={onRequestDelete}
-            onConfirm={onConfirmDelete}
-            onCancel={onCancelDelete}
-          />
+          <DeleteActions onRequest={onRequestDelete} />
         </div>
       </td>
     </tr>
