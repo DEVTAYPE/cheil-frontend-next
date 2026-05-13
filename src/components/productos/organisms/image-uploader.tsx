@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 
 interface ImageUploaderProps {
@@ -30,6 +30,15 @@ function ImagePreview({ src, alt }: { src: string | null; alt: string }) {
   )
 }
 
+const MAX_SIZE_MB = 5
+const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024
+
+function validateFile(file: File): string | null {
+  if (!file.type.startsWith('image/')) return 'Solo se permiten archivos de imagen'
+  if (file.size > MAX_SIZE_BYTES) return `El archivo no puede superar ${MAX_SIZE_MB} MB`
+  return null
+}
+
 export function ImageUploader({
   nombre,
   imagenUrl,
@@ -39,17 +48,31 @@ export function ImageUploader({
   onUpload,
 }: ImageUploaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (file) onUpload(file)
+    if (!file) return
+
+    const err = validateFile(file)
+    if (err) {
+      setValidationError(err)
+      e.target.value = ''
+      return
+    }
+
+    setValidationError(null)
+    onUpload(file)
   }
+
+  const displayError = validationError ?? (isError ? (error instanceof Error ? error.message : 'Error al subir imagen') : null)
 
   return (
     <div className="mb-6 flex items-center gap-4 border-b border-gray-100 pb-6">
       <ImagePreview src={imagenUrl} alt={nombre} />
       <div>
         <p className="text-sm font-medium text-gray-700">Imagen del producto</p>
+        <p className="text-xs text-gray-400">PNG, JPG, WEBP · máx. {MAX_SIZE_MB} MB</p>
         <input
           ref={fileInputRef}
           type="file"
@@ -66,10 +89,8 @@ export function ImageUploader({
         >
           {imagenUrl ? 'Cambiar imagen' : 'Subir imagen'}
         </Button>
-        {isError && (
-          <p className="mt-1 text-xs text-red-600">
-            {error instanceof Error ? error.message : 'Error al subir imagen'}
-          </p>
+        {displayError && (
+          <p className="mt-1 text-xs text-red-600">{displayError}</p>
         )}
       </div>
     </div>

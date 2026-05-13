@@ -1,17 +1,25 @@
-import type { Producto } from '@/lib/types'
-import { PaginationBar } from '../molecules/pagination-bar'
-import { ProductoRow } from './producto-row'
+import type { Producto } from "@/lib/types";
+import { PaginationBar } from "../molecules/pagination-bar";
+import { ProductoRow } from "./producto-row";
 
-const TABLE_HEADERS = ['#', 'Imagen', 'Nombre', 'Categoría', 'Precio', 'Stock', 'Acciones']
+const TABLE_HEADERS = [
+  "#",
+  "Imagen",
+  "Nombre",
+  "Categoría",
+  "Precio",
+  "Stock",
+  "Acciones",
+];
 
 interface ProductosTableProps {
-  items: Producto[]
-  page: number
-  lastPage: number
-  total: number
-  onRequestDelete: (id: number) => void
-  onPrevPage: () => void
-  onNextPage: () => void
+  items: Producto[];
+  page: number;
+  lastPage: number;
+  total: number;
+  onRequestDelete: (id: number) => void;
+  onPrevPage: () => void;
+  onNextPage: () => void;
 }
 
 export function ProductosTable({
@@ -41,15 +49,19 @@ export function ProductosTable({
         <tbody className="divide-y divide-gray-100 bg-white">
           {items.length === 0 ? (
             <tr>
-              <td colSpan={TABLE_HEADERS.length} className="py-12 text-center text-gray-400">
+              <td
+                colSpan={TABLE_HEADERS.length}
+                className="py-12 text-center text-gray-400"
+              >
                 No se encontraron productos
               </td>
             </tr>
           ) : (
-            items.map((producto) => (
+            items.map((producto, idx) => (
               <ProductoRow
                 key={producto.id}
                 producto={producto}
+                idx={idx}
                 onRequestDelete={() => onRequestDelete(producto.id)}
               />
             ))
@@ -67,5 +79,5 @@ export function ProductosTable({
         />
       )}
     </div>
-  )
+  );
 }

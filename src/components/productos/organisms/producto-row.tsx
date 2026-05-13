@@ -1,28 +1,38 @@
-import Link from 'next/link'
-import type { Producto } from '@/lib/types'
-import { Badge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
-import { ProductImage } from '../atoms/product-image'
-import { ProductoInfo } from '../molecules/producto-info'
-import { DeleteActions } from '../molecules/delete-actions'
+import Link from "next/link";
+import type { Producto } from "@/lib/types";
+import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { ProductImage } from "../atoms/product-image";
+import { ProductoInfo } from "../molecules/producto-info";
+import { DeleteActions } from "../molecules/delete-actions";
 
 const formatPrice = (price: number) =>
-  new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price)
+  new Intl.NumberFormat("es-PE", { style: "currency", currency: "PEN" }).format(
+    price,
+  );
 
 interface ProductoRowProps {
-  producto: Producto
-  onRequestDelete: () => void
+  producto: Producto;
+  idx: number;
+  onRequestDelete: () => void;
 }
 
-export function ProductoRow({ producto, onRequestDelete }: ProductoRowProps) {
+export function ProductoRow({
+  producto,
+  idx,
+  onRequestDelete,
+}: ProductoRowProps) {
   return (
     <tr className="transition-colors hover:bg-gray-50">
-      <td className="px-4 py-3 text-sm text-gray-500">{producto.id}</td>
+      <td className="px-4 py-3 text-sm text-gray-500">{idx + 1}</td>
       <td className="px-4 py-3">
         <ProductImage src={producto.imagenUrl} alt={producto.nombre} />
       </td>
       <td className="px-4 py-3">
-        <ProductoInfo nombre={producto.nombre} descripcion={producto.descripcion} />
+        <ProductoInfo
+          nombre={producto.nombre}
+          descripcion={producto.descripcion}
+        />
       </td>
       <td className="px-4 py-3">
         <Badge variant="blue">{producto.categoria.nombre}</Badge>
@@ -31,7 +41,9 @@ export function ProductoRow({ producto, onRequestDelete }: ProductoRowProps) {
         {formatPrice(producto.precio)}
       </td>
       <td className="px-4 py-3">
-        <Badge variant={producto.stock > 0 ? 'green' : 'red'}>{producto.stock}</Badge>
+        <Badge variant={producto.stock > 0 ? "green" : "red"}>
+          {producto.stock}
+        </Badge>
       </td>
       <td className="px-4 py-3">
         <div className="flex gap-2">
@@ -44,5 +56,5 @@ export function ProductoRow({ producto, onRequestDelete }: ProductoRowProps) {
         </div>
       </td>
     </tr>
-  )
+  );
 }

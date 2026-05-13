@@ -1,16 +1,20 @@
-import type { Categoria } from '@/lib/types'
-import { EmptyRow } from '../molecules/empty-row'
-import { CategoriaRow } from './categoria-row'
+import type { Categoria } from "@/lib/types";
+import { EmptyRow } from "../molecules/empty-row";
+import { CategoriaRow } from "./categoria-row";
 
-const TABLE_HEADERS = ['#', 'Nombre', 'Descripción', 'Acciones']
+const TABLE_HEADERS = ["#", "Nombre", "Descripción", "Acciones"];
 
 interface CategoriaTableProps {
-  categorias: Categoria[]
-  onEdit: (cat: Categoria) => void
-  onRequestDelete: (id: number) => void
+  categorias: Categoria[];
+  onEdit: (cat: Categoria) => void;
+  onRequestDelete: (id: number) => void;
 }
 
-export function CategoriaTable({ categorias, onEdit, onRequestDelete }: CategoriaTableProps) {
+export function CategoriaTable({
+  categorias,
+  onEdit,
+  onRequestDelete,
+}: CategoriaTableProps) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
       <table className="min-w-full divide-y divide-gray-200">
@@ -30,9 +34,10 @@ export function CategoriaTable({ categorias, onEdit, onRequestDelete }: Categori
           {categorias.length === 0 ? (
             <EmptyRow colSpan={TABLE_HEADERS.length} />
           ) : (
-            categorias.map((cat) => (
+            categorias.map((cat, idx) => (
               <CategoriaRow
                 key={cat.id}
+                idx={idx}
                 categoria={cat}
                 onEdit={() => onEdit(cat)}
                 onRequestDelete={() => onRequestDelete(cat.id)}
@@ -42,5 +47,5 @@ export function CategoriaTable({ categorias, onEdit, onRequestDelete }: Categori
         </tbody>
       </table>
     </div>
-  )
+  );
 }
